@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cartão Virtual — SyraSolar</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* Reset */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+    img{max-width:100%; display:block}
+    button{font:inherit}
+
+    /* Tokens Fluent + Marca */
+    :root{
+      --accent:#EB5B12; /* SyraSolar */
+      --accent-ink:#ffffff;
+      --bg:#ffffff;      /* fundo branco fixo */
+      --card:#ffffff;
+      --stroke:#E6E6E6;
+      --text:#111315;
+      --subtext:#4b5563;
+      --muted:#6b7280;
+      --hover:#f6f6f6;
+      --radius-xl:20px; --radius-lg:14px;
+      --shadow-2: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.10);
+      --easing:cubic-bezier(.2,0,.2,1);
+    }
+
+    /* Página (vertical) */
+    body{
+      background:#fff;              /* branco absoluto */
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Noto Sans", sans-serif;
+      display:grid; place-items:center; padding:20px
+    }
+
+    .card{
+      width:min(420px, 100%);
+      background:var(--card); border:1px solid var(--stroke);
+      border-radius:var(--radius-xl); box-shadow:var(--shadow-2);
+      overflow:hidden;
+    }
+
+    .brandbar{ height:6px; background:linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000 30%)); }
+
+    .top{ display:grid; place-items:center; padding:24px 24px 8px }
+    .avatar{
+      width:96px; height:96px; border-radius:50%;
+      display:grid; place-items:center; overflow:hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,.12);
+      border:3px solid #fff; background:#fff;
+    }
+    .avatar img{ width:100%; height:100%; object-fit:cover; object-position:center }
+    .initials{ display:none; width:100%; height:100%; background:var(--accent); color:#fff; font-weight:800; font-size:28px; display:grid; place-items:center }
+
+    .name{ margin:14px 0 4px; font-size:clamp(20px, 4.8vw, 26px); font-weight:700; letter-spacing:.2px; text-align:center }
+    .role{ margin:0; color:var(--subtext); font-size:14.5px; text-align:center }
+    .company{ margin-top:8px; color:var(--muted); font-size:13px; text-align:center }
+
+    .actions{ display:grid; gap:10px; padding:18px 16px 8px }
+    .btn{
+      appearance:none; border:1px solid var(--stroke); background:var(--card); color:var(--text);
+      padding:14px 14px; border-radius:14px; display:flex; align-items:center; gap:12px;
+      cursor:pointer; text-decoration:none; font-weight:650; font-size:15px; line-height:1;
+      transition: transform .12s var(--easing), background .12s var(--easing), border-color .12s var(--easing)
+    }
+    .btn:hover{ background:var(--hover) }
+    .btn:active{ transform:translateY(1px) }
+    .btn:focus-visible{ outline:2px solid color-mix(in srgb, var(--accent) 60%, white 40%); outline-offset:2px }
+    .btn .icon{ width:20px; height:20px }
+    .btn.primary{ background:var(--accent); border-color:color-mix(in srgb, var(--accent) 70%, #000 30%); color:var(--accent-ink) }
+    .btn.primary:hover{ filter: saturate(1.05) brightness(1.02) }
+
+    .list{ display:grid; gap:8px; padding:10px 16px 2px }
+    .row{ display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:12px }
+    .row:hover{ background:var(--hover) }
+    .row .mini{ width:18px; height:18px }
+    .row a{ color:inherit; text-decoration:none; word-break:break-word }
+
+    .footer{ padding:8px 16px 18px; display:grid; gap:8px; justify-items:center }
+    .note{ font-size:12.5px; color:var(--muted); text-align:center }
+  </style>
+</head>
+<body>
+  <main class="card" role="region" aria-label="Cartão de contato (vertical)">
+    <div class="brandbar" aria-hidden="true"></div>
+
+    <!-- Topo vertical -->
+    <section class="top">
+      <div class="avatar" id="avatar">
+        <img id="avatarImg" alt="Foto do perfil" loading="lazy"
+             src="https://drive.google.com/thumbnail?id=1Dql7Ef3Rvw49LooUO5fGmyQ45WNdO5Oo">
+        <div class="initials" id="avatarFallback">RB</div>
+      </div>
+      <h1 class="name" id="name">Nome do Colaborador</h1>
+      <p class="role" id="role">Cargo — SyraSolar</p>
+      <div class="company" id="companyText">SyraSolar • São Paulo, BR</div>
+    </section>
+
+    <!-- Ações (botões com ícones) -->
+    <section class="actions">
+      <a class="btn primary" id="primaryCta" href="#" target="_blank" rel="noopener">
+        <!-- WhatsApp -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.52 3.5A10 10 0 0 0 3.46 17.2L2 22l4.9-1.42A10 10 0 1 0 20.52 3.5Zm-8.48 16.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-2.91.84.84-2.84-.2-.31A8.14 8.14 0 1 1 12.04 19.7Zm4.71-6.14c-.26-.13-1.53-.76-1.77-.85s-.41-.13-.58.13c-.17.26-.67.85-.82 1.02-.15.17-.3.2-.56.07-.26-.13-1.09-.4-2.08-1.27-.77-.68-1.29-1.52-1.44-1.78-.15-.26-.02-.4.11-.53.12-.12.26-.3.4-.45.13-.15.17-.26.26-.44.09-.17.04-.33-.02-.46-.06-.13-.58-1.41-.8-1.93-.21-.51-.43-.44-.58-.45l-.5-.01c-.17 0-.45.06-.68.33-.23.26-.89.87-.89 2.12s.91 2.46 1.04 2.63c.13.17 1.79 2.72 4.35 3.81.61.26 1.09.41 1.46.52.61.19 1.17.16 1.61.1.49-.07 1.53-.62 1.75-1.22.22-.6.22-1.11.15-1.22-.06-.11-.23-.17-.49-.3Z"/></svg>
+        <span>Falar no WhatsApp</span>
+      </a>
+
+      <a class="btn" id="emailBtn" href="mailto:contato@syrasolar.com">
+        <!-- E-mail -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm-1.4 4.25-6.18 4.63a1 1 0 0 1-1.2 0L5.04 8.25a.75.75 0 1 1 .9-1.2L12 11l6.06-3.95a.75.75 0 1 1 .9 1.2Z"/></svg>
+        <span>Enviar e-mail</span>
+      </a>
+
+      <button class="btn" id="saveVcf" type="button">
+        <!-- Download -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 20h14v-2H5v2Zm7-16-4 4h3v6h2V8h3l-4-4Z"/></svg>
+        <span>Salvar contato (.vcf)</span>
+      </button>
+
+      <button class="btn" id="shareBtn" type="button">
+        <!-- Share -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7-4.11A2.99 2.99 0 1 0 14 4a2.99 2.99 0 0 0 .04.49l-7 4.11a3 3 0 1 0 0 6.8l7.05 4.14c-.03.15-.05.31-.05.46a3 3 0 1 0 3-2.92Z"/></svg>
+        <span>Compartilhar</span>
+      </button>
+    </section>
+
+    <!-- Contatos -->
+    <section class="list" aria-label="Canais de contato">
+      <div class="row">
+        <svg class="mini" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12.713 2 6.75V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6.75l-10 5.963L12 12.713ZM12 11 2 5h20l-10 6Z"/></svg>
+        <a id="emailLink" href="mailto:contato@syrasolar.com">contato@syrasolar.com</a>
+      </div>
+      <div class="row">
+        <svg class="mini" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C11.4 21 3 12.6 3 2a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2Z"/></svg>
+        <a id="telLink" href="tel:+5511999999999">+55 11 99999-9999</a>
+      </div>
+      <div class="row">
+        <svg class="mini" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.52 3.5H3.48A1.98 1.98 0 0 0 1.5 5.48v13.04c0 1.1.89 1.98 1.98 1.98h17.04c1.1 0 1.98-.89 1.98-1.98V5.48c0-1.1-.89-1.98-1.98-1.98ZM8.2 18.02H5.64V9.74H8.2v8.28Zm-1.28-9.41a1.48 1.48 0 1 1 0-2.96 1.48 1.48 0 0 1 0 2.96ZM18.36 18.02h-2.56v-4.32c0-1.03-.02-2.35-1.43-2.35-1.43 0-1.65 1.12-1.65 2.27v4.39H10.2V9.74h2.46v1.14h.03c.34-.64 1.18-1.31 2.43-1.31 2.6 0 3.24 1.71 3.24 3.94v4.51Z"/></svg>
+        <a id="lnLink" href="https://www.linkedin.com/company/syrasolar" target="_blank" rel="noopener">/company/syrasolar</a>
+      </div>
+      <div class="row">
+        <svg class="mini" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.9 2.1a1 1 0 0 1 2.2 0v7.8h7.8a1 1 0 0 1 0 2.2h-7.8v7.8a1 1 0 0 1-2.2 0v-7.8H3.1a1 1 0 0 1 0-2.2h7.8V2.1Z"/></svg>
+        <a id="profileLink" href="https://syrasolar.com.br" target="_blank" rel="noopener">syrasolar.com.br</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="note">Dica: toque em “Salvar contato” para baixar o vCard. O botão principal abre o WhatsApp.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Configuração rápida
+    const PROFILE = {
+      givenName: "Rodrigo",
+      familyName: "Bianchi",
+      title: "Pesquisador",
+      org: "SyraSolar",
+      cityCountry: "Rio de Janeiro, BR",
+      email: "engenharia@syrasolar.com",
+      phone: "+55 21 99966-0969",
+      whatsapp: "+55 21 99966-0969",
+      website: "https://syrasolar.com.br",
+      linkedin: "https://www.linkedin.com/company/syrasolar"
+    };
+
+    const $ = s => document.querySelector(s);
+    const fullName = `${PROFILE.givenName} ${PROFILE.familyName}`.trim();
+
+    // Topo
+    $('#name').textContent = fullName || 'Sem nome';
+    $('#role').textContent = `${PROFILE.title} — ${PROFILE.org}`;
+    $('#companyText').textContent = `${PROFILE.org} • ${PROFILE.cityCountry}`;
+
+    // Avatar: se a imagem falhar, mostra iniciais
+    const avatarImg = document.getElementById('avatarImg');
+    const avatarFallback = document.getElementById('avatarFallback');
+    avatarImg.addEventListener('error', ()=>{
+      avatarImg.style.display = 'none';
+      avatarFallback.style.display = 'grid';
+      avatarFallback.textContent = `${PROFILE.givenName?.[0]||''}${PROFILE.familyName?.[0]||''}`.toUpperCase();
+    });
+
+    // Links
+    const telPlain = PROFILE.phone.replace(/\s|\(|\)|-/g,'');
+    $('#emailLink').href = `mailto:${PROFILE.email}`; $('#emailLink').textContent = PROFILE.email;
+    $('#telLink').href = `tel:${telPlain}`; $('#telLink').textContent = PROFILE.phone;
+    $('#lnLink').href = PROFILE.linkedin; $('#lnLink').textContent = new URL(PROFILE.linkedin).pathname;
+    $('#profileLink').href = PROFILE.website; $('#profileLink').textContent = new URL(PROFILE.website).hostname.replace('www.','');
+
+    // CTA principal (WhatsApp se disponível)
+    const wa = PROFILE.whatsapp?.replace(/\D/g,'');
+    const primaryHref = wa ? `https://wa.me/${wa}` : `mailto:${PROFILE.email}`;
+    const primaryLabel = wa ? 'Falar no WhatsApp' : 'Enviar e-mail';
+    const cta = $('#primaryCta'); cta.href = primaryHref; cta.querySelector('span').textContent = primaryLabel;
+
+    // vCard (.vcf)
+    function downloadVCard(){
+      const v = [
+        'BEGIN:VCARD','VERSION:3.0',
+        `N:${PROFILE.familyName};${PROFILE.givenName};;;`,
+        `FN:${fullName}`,
+        `ORG:${PROFILE.org}`,
+        `TITLE:${PROFILE.title}`,
+        `EMAIL;TYPE=INTERNET,PREF:${PROFILE.email}`,
+        `TEL;TYPE=CELL,VOICE:${telPlain}`,
+        `URL:${PROFILE.website}`,
+        'END:VCARD'
+      ].join('\r\n');
+      const blob = new Blob([v], {type:'text/vcard'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${fullName.replace(/\s+/g,'_')}.vcf`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=> URL.revokeObjectURL(a.href), 1000);
+    }
+    document.getElementById('saveVcf').addEventListener('click', downloadVCard);
+
+    // Compartilhar
+    document.getElementById('shareBtn').addEventListener('click', async ()=>{
+      const data = { title:`Contato — ${fullName} (${PROFILE.org})`, url: location.href,
+        text:`${fullName} — ${PROFILE.title} | ${PROFILE.org}\nE-mail: ${PROFILE.email}\nTel: ${PROFILE.phone}` };
+      try{ if(navigator.share) await navigator.share(data); else await navigator.clipboard.writeText(`${data.text}\n${data.url}`); }
+      catch(e){}
+    });
+
+    document.title = `${fullName} — ${PROFILE.title} | ${PROFILE.org}`;
+  </script>
+</body>
+</html>
